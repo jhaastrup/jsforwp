@@ -1,17 +1,39 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import React, { Component } from "react";
+import ReactDOM from "react-dom"; 
+import axios from 'axios';
+import ReactHtmlParser from 'react-html-parser';
+ 
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+class Home extends Component {
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+  //set posts to an empty state
+
+  state = {
+    posts: []
+  }  
+
+  //component did mount
+  componentDidMount() {
+    axios.get(`https://dev-sendbox-test.pantheonsite.io/wp-json/wp/v2/posts`)
+      .then(res => {
+        const posts = res.data;
+        this.setState({ posts });
+      })
+  }
+
+  // ReactHtmlParser(html)
+  
+//render your response.
+  render(){
+    return(
+      <ul>
+      { this.state.posts.map(post => ReactHtmlParser(<li>{post.content.rendered}</li>))}
+    </ul>
+    )
+  }
+} 
+
+
+ReactDOM.render(<Home />, document.querySelector("#root"));
+
+export default Home;
