@@ -27,7 +27,7 @@ class Home extends Component {
   render(){
     return(
       <ul>
-      { this.state.posts.map(post => ReactHtmlParser(<li>{post.content.rendered}</li>))}
+      { this.state.posts.map(post => <li>{ReactHtmlParser(post.content.rendered)}</li>)}
     </ul>
     )
   }
